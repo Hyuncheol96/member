@@ -10,6 +10,8 @@ import org.springframework.test.annotation.Rollback;
 
 import javax.transaction.Transactional;
 
+import java.util.stream.IntStream;
+
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
@@ -17,8 +19,8 @@ public class MemberTest {
     @Autowired
     private MemberService memberService;
 
-    public MemberDTO newMember() {
-        MemberDTO member = new MemberDTO("테스트이메일", "테스트비밀번호", "테스트이름", 10, "테스트폰번호");
+    public MemberDTO newMember(int i) {
+        MemberDTO member = new MemberDTO("테스트이메일"+i, "테스트비밀번호"+i, "테스트이름"+i, 99+i, "테스트폰번호"+i);
             return member;
     }
 
@@ -30,9 +32,10 @@ public class MemberTest {
     public  void memberSaveTest() {
 //        MemberDTO memberDTO = new MemberDTO("이메일", "비번", "이름", 10, "번호");
 //        Long saveId = memberService.save(memberDTO);
-        Long saveId = memberService.save(newMember());
+        MemberDTO saveDTO = newMember(1);
+        Long saveId = memberService.save(saveDTO);
         MemberDTO memberDTO = memberService.findById(saveId);
-        assertThat(newMember().getMemberEmail()).isEqualTo(memberDTO.getMemberEmail());
+        assertThat(saveDTO.getMemberEmail()).isEqualTo(memberDTO.getMemberEmail());
     }
 
     @Test
@@ -54,11 +57,17 @@ public class MemberTest {
         MemberDTO loginResult = memberService.login(loginMemberDTO);
         // 로그인 겨로가가 not null 이면 통과
         assertThat(loginResult).isNotNull();
-
-
     }
 
-
+    @Test
+    @Transactional
+    @Rollback(value = true)
+    @DisplayName("회원 데이터 저장")
+    public void memberSave() {
+        IntStream.rangeClosed(1,20).forEach(i -> {
+            memberService.save(newMember(i));
+        });
+    }
 
 
 

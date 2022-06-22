@@ -5,12 +5,10 @@ import com.its.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -39,6 +37,7 @@ public class MemberController {
     @PostMapping("/login")
     public String login(@ModelAttribute MemberDTO memberDTO, Model model, HttpSession session) {
         MemberDTO loginResult = memberService.login(memberDTO);
+        System.out.println("loginResult = " + loginResult);
         if(loginResult != null) {
             model.addAttribute("loginMember", loginResult);
             session.setAttribute("loginMemberEmail", loginResult.getMemberEmail());
@@ -47,7 +46,38 @@ public class MemberController {
         } else {
             return "memberPages/login";
         }
+
     }
+    @GetMapping("/")
+        public String findAll(Model model) {
+            List<MemberDTO> memberDTOList = memberService.findAll();
+            model.addAttribute("memberList", memberDTOList);
+            return "memberPages/list";
+
+        }
+
+    @GetMapping("/{id}")
+    public String detail(@PathVariable Long id, Model model) {
+        MemberDTO memberDTO = memberService.findById(id);
+        model.addAttribute("member", memberDTO);
+        return "memberPages/detail";
+    }
+
+//    @GetMapping("/delete")
+//        public String delete(@RequestParam("id") Long id) {
+//        boolean deleteResult = memberService.delete(id);
+//        if (deleteResult) {
+//            return "redirect:/member/findAll";
+//        } else {
+//            return "delete-fail";
+//        }
+//    }
+
+
+
+
+
+
 
 //    @PostMapping("/login")
 //    public String login(@ModelAttribute MemberDTO memberDTO) {
@@ -58,5 +88,5 @@ public class MemberController {
 //            return "memberPages/login";
 //        }
 //    }
-
 }
+

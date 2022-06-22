@@ -1,12 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
     <h2>main.html</h2>
-    로그인
+    <table>
+        <tr>
+            <th>번호:</th> <th><p th:text="${session.loginId}"></p></th>
+        </tr>
+        <tr>
+            <th>아이디:</th> <th><p th:text="${session.loginMemberEmail}"></p></th>
+        </tr>
+    </table>
+<!--    <p th:text="${session.}"></p>-->
+    <a href="/member/">회원리스트</a>
 
 </body>
 </html>
