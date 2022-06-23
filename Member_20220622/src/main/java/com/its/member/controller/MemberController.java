@@ -48,6 +48,8 @@ public class MemberController {
         }
 
     }
+
+    // 회원목록 조회
     @GetMapping("/")
         public String findAll(Model model) {
             List<MemberDTO> memberDTOList = memberService.findAll();
@@ -56,18 +58,26 @@ public class MemberController {
 
         }
 
+        // 상세조회
     @GetMapping("/{id}")
-    public String detail(@PathVariable Long id, Model model) {
+    public String findById(@PathVariable Long id, Model model) {
         MemberDTO memberDTO = memberService.findById(id);
         model.addAttribute("member", memberDTO);
         return "memberPages/detail";
     }
 
-//    @GetMapping("/delete")
+    @GetMapping("/ajax/{id}")
+    public @ResponseBody MemberDTO findByIdAjax(@PathVariable Long id) {
+        MemberDTO memberDTO = memberService.findById(id);
+        return memberDTO;
+    }
+
+
+//    @GetMapping("/{id}")
 //        public String delete(@RequestParam("id") Long id) {
 //        boolean deleteResult = memberService.delete(id);
 //        if (deleteResult) {
-//            return "redirect:/member/findAll";
+//            return "redirect:/findAll";
 //        } else {
 //            return "delete-fail";
 //        }
