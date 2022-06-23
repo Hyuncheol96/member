@@ -26,6 +26,9 @@
 <!--            <th>전화번호</th>-->
             <th>상세조회</th>
             <th>상세조회(ajax)</th>
+            <th>삭제</th>
+            <th>삭제(ajax)</th>
+            <th>수정</th>
 
 
         </tr>
@@ -40,8 +43,9 @@
                 <a th:href="@{|/member/${member.id}|}">조회</a>
             </td>
             <td><button th:onclick="detail([[${member.id}]])">조회(ajax)</button></td>
-            <td><a th:href="@{|/member/delete?id=${member.id}|}">삭제</a></td>
-            <td><button><a th:onclick="delete([[${member.id}]])">삭제(ajax)</a></button></td>
+            <td><a th:href="@{|/member/delete/${member.id}|}">삭제</a></td>
+            <td><button><a th:onclick="deleteById([[${member.id}]])">삭제(ajax)</a></button></td>
+            <td><a href="/member/update">수정</a></td>
         </tr>
     </table>
     <div id="member-detail">
@@ -49,6 +53,18 @@
     </div>
 </body>
 <script th:inline="javascript">
+    const deleteById = (id) => {
+        $.ajax({
+            type: "delete",
+            url: "/member/"+id,
+            dataType: "text",
+            success: function () { // status code = 200
+                location.href = "/member/";
+            }, error: function () {
+                alert("ajax 실패");
+            }
+        });
+    }
     const detail = (id) => {
         const detail = document.getElementById("detail");
         $.ajax({

@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+
 </head>
 <body>
     <h2>회원가입</h2>
     <form action="/member/save" method="post" style="text-align: center">
-        계정: <input type="text" name="memberEmail"><br>
+        계정: <input type="text" name="memberEmail" id="memberEmail" onblur="emailDuplicate()"><br>
+        <span id="dup-check-result"></span>
         비밀번호: <input type="password" name="memberPassword"><br>
         이름: <input type="text" name="memberName"><br>
         나이: <input type="text" name="memberAge"><br>
@@ -15,4 +18,30 @@
         <input type="submit" value="가입">
     </form>
 </body>
+<script th:inline="javascript">
+    const emailDuplicate = () => {
+        const memberEmail = document.getElementById("memberEmail").value;
+        const exp = /^(?=.*[a-z])(?=.*\d)[a-z\d]{6,10}$/;
+        const checkResult = document.getElementById("dup-check-result");
+        $.ajax({
+            type: "post",
+            url: "/member/emailCheck",
+            data: {"memberEmail": memberEmail},
+            dataType: "text",
+            success: function (result) {
+                if (result == "ok" && memberEmail.match(exp)) {
+                    checkResult.innerHTML = "사용가능합니다.";
+                    checkResult.style.color = "green";
+                } else {
+                    checkResult.innerHTML = "이미 사용중이거나 올바른 아이디가 아닙니다."
+                    checkResult.style.color = "red";
+                }
+            },
+            error: function () {
+                alert("오타체크");
+            }
+        })
+    }
+
+</script>
 </html>

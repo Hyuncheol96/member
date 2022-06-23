@@ -74,15 +74,21 @@ public class MemberService {
         return memberDTOList;
     }
 
-//    public boolean delete(Long id) {
-//        int deleteResult = memberRepository.delete();
-//        if (deleteResult > 0) {
-//            return true;
-//        } else  {
-//            return false;
-//        }
-//    }
+    public void delete(Long id) {
+        memberRepository.deleteById(id);
+    }
 
 
+    public void update(MemberDTO memberDTO) {
+        memberRepository.save(MemberEntity.toUpdateEntity(memberDTO));
+    }
 
+    public String dupCheck(String memberEmail) {
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberEmail(memberEmail);
+        if (optionalMemberEntity.isEmpty()) {
+            return "ok";
+        } else {
+            return "no";
+        }
+    }
 }
