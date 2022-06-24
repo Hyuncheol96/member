@@ -39,35 +39,45 @@ public class MemberController {
     }
 
     @GetMapping("/login-form")
-    public String loginForm() {
+    public String loginForm(@RequestParam(value = "redirectURL", defaultValue = "/") String redirectURL, Model model) {
+        model.addAttribute("redirectURL", redirectURL);
         return "memberPages/login";
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute MemberDTO memberDTO, Model model, HttpSession session) {
+    public String login(@ModelAttribute MemberDTO memberDTO, Model model, HttpSession session,
+                        @RequestParam(value = "redirectURL", defaultValue = "/") String redirectURL) {
         MemberDTO loginResult = memberService.login(memberDTO);
         System.out.println("loginResult = " + loginResult);
-        if(loginResult != null) {
-            model.addAttribute("loginMember", loginResult);
+        if (loginResult != null) {
             session.setAttribute("loginMemberEmail", loginResult.getMemberEmail());
             session.setAttribute("loginId", loginResult.getId());
-            return "memberPages/main";
+            System.out.println("redirectURL :" + redirectURL);
+            return "redirect:" + redirectURL; // 로그인 하지 않은 사용자가 로그인 직전에 요청한 주소로 보내줌
         } else {
             return "memberPages/login";
         }
 
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate(); // 세션 전체룰 무효화
+        session.removeAttribute("loginEmail"); // loginEmail만 세션값 삭제
+        return "redirect:/";
+    }
+
+
     // 회원목록 조회
     @GetMapping("/")
-        public String findAll(Model model) {
-            List<MemberDTO> memberDTOList = memberService.findAll();
-            model.addAttribute("memberList", memberDTOList);
-            return "memberPages/list";
+    public String findAll(Model model) {
+        List<MemberDTO> memberDTOList = memberService.findAll();
+        model.addAttribute("memberList", memberDTOList);
+        return "memberPages/list";
 
-        }
+    }
 
-        // 상세조회
+    // 상세조회
     @GetMapping("/{id}")
     public String findById(@PathVariable Long id, Model model) {
         MemberDTO memberDTO = memberService.findById(id);
@@ -84,9 +94,9 @@ public class MemberController {
 
     // get 요청 삭제
     @GetMapping("/delete/{id}")
-        public String delete(@PathVariable Long id) {
+    public String delete(@PathVariable Long id) {
         memberService.delete(id);
-        return  "redirect:/member/";
+        return "redirect:/member/";
 
     }
 
@@ -140,7 +150,7 @@ public class MemberController {
     @PostMapping("/update")
     public String update(@ModelAttribute MemberDTO memberDTO) {
         memberService.update(memberDTO);
-        return "redirect:/member/"+memberDTO.getId();
+        return "redirect:/member/" + memberDTO.getId();
     }
 
     // 수정처리(put 요청)
@@ -149,7 +159,6 @@ public class MemberController {
         memberService.update(memberDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
 
 //    @GetMapping("/{id}")
@@ -161,11 +170,6 @@ public class MemberController {
 //            return "delete-fail";
 //        }
 //    }
-
-
-
-
-
 
 
 //    @PostMapping("/login")

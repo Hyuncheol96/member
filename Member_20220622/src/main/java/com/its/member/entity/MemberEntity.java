@@ -15,10 +15,10 @@ public class MemberEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(name = "member_memberEmail", length = 50, unique = true)
+    @Column(name = "memberEmail", length = 50, unique = true)
     private String memberEmail;
 
-    @Column(name = "member_memberPassword", length = 20)
+    @Column(name = "memberPassword", length = 20)
     private String memberPassword;
 
     @Column(name = "memberName", length = 20)

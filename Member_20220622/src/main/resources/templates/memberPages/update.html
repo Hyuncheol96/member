@@ -25,12 +25,14 @@
         const memberEmail = [[${updateMember.memberEmail}]];
         const memberName = [[${updateMember.memberName}]];
         const memberAge = [[${updateMember.memberAge}]];
+        const memberPassword = [[${updateMember.memberPassword}]];
         const memberPhone = document.getElementById("memberPhone").value;
         // JSON 형식으로 보냄
         const updateDate = JSON.stringify({
             id: id,
             memberEmail: memberEmail,
             memberName: memberName,
+            memberPassword: memberPassword,
             memberAge: memberAge,
             memberPhone: memberPhone
         });
