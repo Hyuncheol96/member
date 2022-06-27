@@ -33,6 +33,9 @@ public class BoardEntity extends BaseEntity{
     @ColumnDefault("0")
     private int boardHits;
 
+    @Column
+    private String boardFileName;
+
 
 
     public static BoardEntity toEntity(BoardDTO boardDTO) {
@@ -43,4 +46,29 @@ public class BoardEntity extends BaseEntity{
         boardEntity.setBoardContents(boardDTO.getBoardContents());
         return boardEntity;
     }
+
+//    public static BoardEntity toUpdateEntity(BoardDTO boardDTO) {
+//        BoardEntity boardEntity = new BoardEntity();
+//        boardEntity.setId(boardDTO.getId());
+//        boardEntity.setBoardTitle(boardDTO.getBoardTitle());
+//        boardEntity.setBoardWriter(boardDTO.getBoardWriter());
+//        boardEntity.setBoardPassword(boardDTO.getBoardPassword());
+//        boardEntity.setBoardContents(boardDTO.getBoardContents());
+//        boardEntity.setBoardHits(boardDTO.getBoardHits());
+//        return boardEntity;
+//    }
+
+    public static BoardEntity toUpdateEntity(BoardDTO boardDTO) {
+        BoardEntity boardEntity = new BoardEntity();
+        boardEntity.setId(boardDTO.getId());
+        boardEntity.setBoardTitle(boardDTO.getBoardTitle());
+        boardEntity.setBoardWriter(boardDTO.getBoardWriter());
+        boardEntity.setBoardPassword(boardDTO.getBoardPassword());
+        boardEntity.setBoardContents(boardDTO.getBoardContents());
+        return boardEntity;
+    }
+
+
+
+
 }

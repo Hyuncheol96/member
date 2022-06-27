@@ -5,6 +5,17 @@
     <title>Title</title>
 </head>
 <body>
+<h2>글 수정화면</h2>
+<form action="/board/update" method="post">
+    <input type="hidden" name="id" th:value="${board.id}">
+    제목: <input type="text" name="boardTitle" th:value="${board.boardTitle}"><br>
+    작성자: <input type="text" name="boardWriter" th:value="${board.boardWriter}" readonly><br>
+    <input type="hidden" name="boardPassword" th:value="${board.boardPassword}">
+    내용: <textarea name="boardContents" cols="30" rows="10" th:text="${board.boardContents}"></textarea><br>
+    <input type="submit" value="글수정">
+</form>
+
+
 
 </body>
 </html>
